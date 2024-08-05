@@ -1,0 +1,122 @@
+﻿@model UserViewModel
+
+@{
+    ViewBag.Title = "List of users";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">@ViewBag.Title</h2>
+        <a data-bs-toggle="modal" data-bs-target="#modalCreateUser" class="float-end px-3"
+           style="cursor:pointer">
+            <i class="bi bi-plus-square-fill h2" style="color:green"></i>
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid mt-3">
+    @if (Model.Users != null && Model.Users.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Super User</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td >@user.Username</td>
+                        <td >@user.Email</td>
+                        <td style="width:5%">@user.IsAdmin</td>
+                        <td style="width:7%">@user.IsSuperUser</td>
+                        <td class ="text-center" style="width:5%">
+                            <a asp-controller="UserManagement" asp-action="Edit" asp-route-id="@user.Id">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                        </td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <td class="text-center" style="width:5%">
+                                <a asp-controller="UserManagement" asp-action="Delete" asp-route-id="@user.Id">
+                                    <i class="bi bi-trash3-fill" style="color:red"></i>
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="text-center" style="width:5%"></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No records found.</p>
+    }
+</div>
+
+<!-- Create User Modal -->
+<form method="post">
+    <div class="modal fade" id="modalCreateUser" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createUserModalLabel">Create New User</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" asp-for="Username" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="text" class="form-control" asp-for="Email" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" asp-for="Password" />
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" id="chkUserRole" class="form-check-input" value="User" checked disabled />
+                            <label class="form-check-label" for="chkUserRole">User Role</label>
+                        </div>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" id="chkAdminRole" class="form-check-input"
+                                       asp-for="IsAdmin" />
+                                <label class="form-check-label" for="chkAdminRole">Admin Role</label>
+                            </div>
+                        }
+
+                        @if (User.IsInRole("SuperUser"))
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" id="chkSuperUserRole" class="form-check-input"
+                                       asp-for="IsSuperUser" />
+                                <label class="form-check-label" for="chkAdminRole">Super User Role</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

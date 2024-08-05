@@ -1,0 +1,59 @@
+﻿@model UserEditResponse
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">Edit User</h2>
+        <div class="d-inline-block float-end py-1">
+            <a asp-controller="UserManagement" asp-action="List" style="text-decoration:none" class="text-white">
+                <i class="bi bi-arrow-bar-left h3" style="color:white"> Back To User List</i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-3">
+    <form method="post">
+        <input asp-for="Id" hidden />
+        <div class="mb-3 row">
+            <label for="UserName" class="col-sm-2 col-form-label text-white">User Name:</label>
+            <div class="col-sm-10">
+                <input asp-for="Username" class="form-control" id="UserName">
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="Email" class="col-sm-2 col-form-label text-white">Email:</label>
+            <div class="col-sm-10">
+                <input asp-for="Email" class="form-control" id="Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <a class="btn btn-dark" asp-controller="UserManagement" asp-action="ChangePassword" asp-route-id="@Model.Id">Change Password</a>            
+            <div><span class="text-success">@TempData["Message"]</span></div>
+        </div>        
+        <div class="mb-3 d-flex">
+            <div class="form-check me-3">
+                <input type="checkbox" id="chkSupeUser" class="form-check-input text-white" asp-for="IsSuperUser" />
+                <label class="form-check-label text-white" for="chkSuperAUser">Super User</label>
+            </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="form-check">
+                    <input type="checkbox" id="chkAdmin" class="form-check-input text-white" asp-for="IsAdmin" />
+                    <label class="form-check-label text-white" for="chkAdmin">Admin</label>
+                </div>
+            }
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary float-end col-sm-1" asp-controller="UserManagement"
+                    asp-action="Edit">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

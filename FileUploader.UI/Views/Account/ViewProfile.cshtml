@@ -1,0 +1,45 @@
+﻿@model ViewProfileViewModel
+@{
+    ViewBag.Title = "View Profile";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">View Profile</h2>
+        <div class="d-inline-block float-end py-1">
+            <a asp-controller="UploadFile" asp-action="Dashboard" style="text-decoration:none">
+                <i class="bi bi-arrow-bar-left h3" style="color:white"> Back To Dashboard</i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-3">
+    <form method="post">
+        <input asp-for="Id" hidden />
+        <div class="mb-3 row">
+            <label for="UserName" class="col-sm-2 col-form-label text-white">User Name:</label>
+            <div class="col-sm-10">
+                <input asp-for="Username" class="form-control" id="UserName">
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="Email" class="col-sm-2 col-form-label text-white">Email:</label>
+            <div class="col-sm-10">
+                <input asp-for="Email" class="form-control" id="Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <a class="btn btn-dark" asp-controller="Account" asp-action="ChangePassword" asp-route-id="@Model.Id">Change Password</a>
+            <div><span class="text-success">@TempData["Message"]</span></div>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary float-end col-sm-1" asp-controller="Account"
+                    asp-action="ViewProfile">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

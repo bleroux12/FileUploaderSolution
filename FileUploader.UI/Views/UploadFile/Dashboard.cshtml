@@ -1,0 +1,150 @@
+﻿@model UploadFileListViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">@ViewBag.Title</h2>
+        <a asp-controller="UploadFile" asp-action="Add" class="float-end px-3">
+            <i class="bi bi-plus-square-fill h2" style="color:green"></i>
+        </a>
+        <a data-bs-toggle="modal" data-bs-target="#uploadModal" class="float-end px-3"
+           style="text-decoration:none; cursor:pointer">
+            <i class="bi bi-file-spreadsheet h2" style="color:green"></i>
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid mt-3">
+    @if (Model != null && Model.UploadFiles.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th title="File Status">File Status</th>
+                    <th title="File Number">File Number</th>
+                    <th title="Invoice Number">Invoice Number</th>
+                    <th title="Invoice Date">Invoice Date</th>
+                    <th title="Client Name">Client</th>
+                    <th title="Number Of Documents Attached">Number Of Documents</th>
+                    <th title="Added Date">Added Date</th>
+                    <th title="Edit File">Edit</th>
+                    <th title="Delete File">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in Model.UploadFiles)
+                {
+                    <tr>
+                        <td style="width:7%" class="text-center">@file.FileStatusCode</td>
+                        <td style="width:15%">@file.FileNumber</td>
+                        <td style="width:15%">@file.InvoiceNumber</td>
+                        <td style="width:15%">@file.InvoiceDate</td>
+                        <td style="width:15%">@file.Client.ClientName</td>
+                        <td style="width:14%" class="text-center">@file.NumberOfDocs</td>
+                        <td>@file.CreatedDateTime</td>
+                        <td class="text-center" style="width:3%">
+                            <a asp-controller="UploadFile" asp-action="Edit" asp-route-id="@file.ID">
+                                <i class="bi bi-pencil-fill" style="color:dodgerblue"></i>
+                            </a>
+                        </td>
+                        <td class="text-center" style="width:5%">
+                            <a asp-controller="UploadFile" asp-action="Delete"
+                               asp-route-id="@file.ID"
+                               asp-route-fileNumber="@file.FileNumber">
+                                <i class="bi bi-trash3-fill" style="color:red"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No records found.</p>
+    }
+    <nav class="d-flex justify-content-between align-items-center">
+        <ul class="pagination mb-0">
+            @if (Model.UploadFiles.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Dashboard" asp-route-pageNumber="@(Model.PageNumber - 1)" >Previous</a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.UploadFiles.TotalPages; i++)
+            {
+                <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                    <a class="page-link" asp-action="Dashboard" asp-route-pageNumber="@i">@i</a>
+                </li>
+            }
+            @if (Model.UploadFiles.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Dashboard" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+                </li>
+            }
+        </ul>
+        <div class="ml-3 text-white">
+            <span>Showing @Model.FirstItemIndex to @Model.LastItemIndex of @Model.TotalItems items</span>
+        </div>
+    </nav>
+</div>
+
+<!-- Upload Excel Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Attach Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UploadFilesViaExcel" asp-controller="UploadFile" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Upload Excel File</label>
+                        <input type="file" class="form-control" id="file" name="excelFile" required>
+                        <div class="text-danger">@ViewBag.ErrorMessage</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for status messages -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-@TempData["MessageType"]">
+                    @TempData["Message"]
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closebtn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var message = '@TempData["Message"]';
+            if (message) {
+                var statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
+                statusModal.show();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,76 @@
+﻿@model ClientUpdateResponse
+
+@{
+    ViewBag.Title = "Edit Client";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">Edit Client</h2>
+        <div class="d-inline-block float-end py-1">
+            <a asp-controller="Client" asp-action="List" style="text-decoration:none" class="text-white">
+                <i class="bi bi-arrow-bar-left h3" style="color:white"> Back To Client List</i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-3">
+    <form method="post">
+        <input type="hidden" asp-for="ID" />
+        <div class="mb-3 row">
+            <label for="ClientName" class="col-sm-2 col-form-label text-white">Client Name:</label>
+            <div class="col-sm-10">
+                <input asp-for="ClientName" class="form-control" id="ClientName">
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="FolderStructure" class="col-sm-2 col-form-label text-white">Folder Structure:</label>
+            <div class="col-sm-10">
+                <input asp-for="FolderStructure" class="form-control" id="FolderStructure">
+                <span asp-validation-for="FolderStructure" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="FileNameStructure" class="col-sm-2 col-form-label text-white">File Name Structure:</label>
+            <div class="col-sm-10">
+                <input asp-for="FileNameStructure" class="form-control" id="FileNameStructure">
+                <span asp-validation-for="FileNameStructure" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="FTPServer" class="col-sm-2 col-form-label text-white">FTP Server:</label>
+            <div class="col-sm-10">
+                <input asp-for="FTPServer" class="form-control" id="FTPServer">
+                <span asp-validation-for="FTPServer" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="FTPUsername" class="col-sm-2 col-form-label text-white">FTP Username:</label>
+            <div class="col-sm-10">
+                <input asp-for="FTPUsername" class="form-control" id="FTPUsername">
+                <span asp-validation-for="FTPUsername" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="FTPPassword" class="col-sm-2 col-form-label text-white">FTP Password:</label>
+            <div class="col-sm-10">
+                <input asp-for="FTPPassword" class="form-control" id="FTPPassword">
+                <span asp-validation-for="FTPPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="CreatedDateTime" class="col-sm-2 col-form-label text-white">Date Added:</label>
+            <div class="col-sm-10">
+                <input asp-for="CreatedDateTime" class="form-control" id="CreatedDateTime" readonly />
+            </div>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary float-end col-sm-1" asp-controller="Client"
+                    asp-action="Edit">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

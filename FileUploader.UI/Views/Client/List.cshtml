@@ -1,0 +1,88 @@
+﻿@model IEnumerable<FileUploader.Core.Domain.Entities.Client>
+@{
+    ViewBag.Title = "Client List";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">@ViewBag.Title</h2>
+        <a asp-controller="Client" asp-action="Add" class="float-end px-3 text-white">
+            <i class="bi bi-plus-square-fill h2" style="color:green"></i>
+        </a>
+    </div>
+</div>
+
+<div class="container-fluid mt-3">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Edit</th>
+                    <th>Client Name</th>
+                    <th>FTP Username</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in Model)
+                {
+                    <tr>
+                        <td style="width:3%" class="text-center">
+                            <a asp-controller="Client" asp-action="Edit" asp-route-id="@client.ID">
+                                <i class="bi bi-pencil-fill" style="color:dodgerblue"></i>
+                            </a>
+                        </td>
+                        <td style="width:45%">
+                            @client.ClientName
+                        </td>
+                        <td style="width:45%">
+                            @client.FTPUsername
+                        </td>
+                        <td class="text-center" style="width:5%">
+                            <a asp-controller="Client" asp-action="Delete" asp-route-id="@client.ID">
+                                <i class="bi bi-trash3-fill" style="color:red"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No records found.</p>
+    }
+</div>
+
+<!-- Modal for status messages -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-@TempData["MessageType"]">
+                    @TempData["Message"]
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closebtn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var message = '@TempData["Message"]';
+            if (message) {
+                var statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
+                statusModal.show();
+            }
+        });
+    </script>
+}

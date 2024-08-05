@@ -1,0 +1,147 @@
+﻿@model UploadFileEditResponse
+@{
+    ViewBag.Title = "Edit File";
+}
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-info">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-black min-vh-100">
+                <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline">Menu</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li class="nav-item">
+                        <a asp-controller="UploadFile" asp-action="Edit" asp-route-id="@Model.ID"
+                           class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-file-earmark-text h3"></i> <span class="ms-1 d-none d-sm-inline">File Detail</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Document" asp-action="List" asp-route-fileID="@Model.ID"
+                           asp-route-invoiceNumber="@Model.InvoiceNumber"
+                           asp-route-invoiceDate="@Model.InvoiceDate"
+                           asp-route-numberOfDocs="@Model.NumberOfDocs"
+                           asp-route-fileNumber="@Model.FileNumber" class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-file-earmark-arrow-down h3"></i><span class="ms-1 d-none d-sm-inline">Documents</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Event" asp-action="List" asp-route-fileID="@Model.ID"
+                           asp-route-invoiceNumber="@Model.InvoiceNumber"
+                           asp-route-invoiceDate="@Model.InvoiceDate"
+                           asp-route-numberOfDocs="@Model.NumberOfDocs"
+                           asp-route-fileNumber="@Model.FileNumber" class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-calendar2-event h3"></i><span class="ms-1 d-none d-sm-inline">Events</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col py-3">
+            <div class="bg-info py-2 mb-3">
+                <div class="container-fluid">
+                    <h2 class="d-inline-block text-white">Edit File</h2>
+                    <div class="d-inline-block float-end py-1">
+                        <a asp-controller="UploadFile" asp-action="Send" asp-route-fileID="@Model.ID"
+                           asp-route-invoiceNumber="@Model.InvoiceNumber"
+                           asp-route-invoiceDate="@Model.InvoiceDate"
+                           asp-route-numberOfDocs="@Model.NumberOfDocs"
+                           asp-route-fileNumber="@Model.FileNumber" style="text-decoration:none">
+                            <i class="bi bi-send-arrow-up h5" style="color:white"> Send</i>
+                        </a>
+                    </div>
+                    <div class="d-inline-block float-end py-1 me-3">
+                        <a asp-controller="UploadFile" asp-action="Dashboard" style="text-decoration:none">
+                            <i class="bi bi-arrow-bar-left h5" style="color:white"> Dashboard</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <form method="post">
+                <input asp-for="ID" type="hidden" />
+                <div class="mb-3 ms-1 row">
+                    <label for="FileNumber" class="col-sm-2 col-form-label text-white">File Number:</label>
+                    <div class="col-sm-10">
+                        <input asp-for="FileNumber" class="form-control" id="FileNumber">
+                        <span asp-validation-for="FileNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3 ms-1 row">
+                    <label for="InvoiceNumber" class="col-sm-2 col-form-label text-white">Invoice Number:</label>
+                    <div class="col-sm-10">
+                        <input asp-for="InvoiceNumber" class="form-control" id="InvoiceNumber">
+                        <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3 ms-1 row">
+                    <label for="InvoiceDate" class="col-sm-2 col-form-label text-white">Invoice Date:</label>
+                    <div class="col-sm-10">
+                        <input asp-for="InvoiceDate" class="form-control" id="InvoiceDate">
+                        <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3 ms-1 row">
+                    <label for="ClientID" class="col-sm-2 col-form-label text-white">Client</label>
+                    <div class="col-sm-10">
+                        <select asp-for="ClientID" asp-items="Model.Clients" class="form-control">
+                        </select>
+                        <span asp-validation-for="ClientID" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3 ms-1 row">
+                    <label for="NumberOfDocs" class="col-sm-2 col-form-label text-white">Number of Documents:</label>
+                    <div class="col-sm-10">
+                        <input asp-for="NumberOfDocs" class="form-control" id="NumberOfDocs" readonly>
+                        <span asp-validation-for="NumberOfDocs" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3 ms-1 row">
+                    <label for="FileStatusDescription" class="col-sm-2 col-form-label text-white">File Status:</label>
+                    <div class="col-sm-10">
+                        <input asp-for="FileStatusDescription" class="form-control" id="FileStatusDescription" readonly>
+                        <span asp-validation-for="FileStatusDescription" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary float-end col-sm-1" asp-controller="UploadFile"
+                            asp-action="Edit">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for status messages -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-@TempData["MessageType"]">
+                    @TempData["Message"]
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closebtn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var message = '@TempData["Message"]';
+            if (message) {
+                var statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
+                statusModal.show();
+            }
+        });
+    </script>
+}

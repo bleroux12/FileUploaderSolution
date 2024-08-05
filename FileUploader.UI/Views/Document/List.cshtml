@@ -1,0 +1,187 @@
+﻿@model FileDocumentResponse
+@{
+    ViewBag.Title = "Documents Attached";
+}
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-info">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-black min-vh-100">
+                <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-black text-decoration-none">
+                    <span class="fs-5 d-none d-sm-inline text-white">Menu</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <li class="nav-item">
+                        <a asp-controller="UploadFile" asp-action="Edit" asp-route-id="@Model.FileID" class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-file-earmark-text h3"></i> <span class="ms-1 d-none d-sm-inline">File Detail</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Document" asp-action="List" asp-route-fileID="@Model.FileID"
+                           asp-route-invoiceNumber="@Model.InvoiceNumber"
+                           asp-route-invoiceDate="@Model.InvoiceDate"
+                           asp-route-numberOfDocs="@Model.NumberOfDocs" 
+                           asp-route-fileNumber="@Model.FileNumber" 
+                           class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-file-earmark-arrow-down h3"></i><span class="ms-1 d-none d-sm-inline">Documents</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Event" asp-action="List" asp-route-fileID="@Model.FileID"
+                           asp-route-invoiceNumber="@Model.InvoiceNumber"
+                           asp-route-invoiceDate="@Model.InvoiceDate"
+                           asp-route-numberOfDocs="@Model.NumberOfDocs"
+                           asp-route-fileNumber="@Model.FileNumber" class="nav-link align-middle px-0 text-white">
+                            <i class="bi bi-calendar2-event h3"></i><span class="ms-1 d-none d-sm-inline">Events</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col py-3">
+            <div class="bg-info py-2">
+                <div class="container-fluid">
+                    <h2 class="d-inline-block text-white">Edit File</h2>
+                    <div class="d-inline-block float-end py-1">
+                        <a asp-controller="UploadFile" asp-action="Send" asp-route-fileID="@Model.FileID"
+                           asp-route-invoiceNumber="@Model.InvoiceNumber"
+                           asp-route-invoiceDate="@Model.InvoiceDate"
+                           asp-route-numberOfDocs="@Model.NumberOfDocs"
+                           asp-route-fileNumber="@Model.FileNumber" style="text-decoration:none">
+                            <i class="bi bi-send-arrow-up h5" style="color:white"> Send</i>
+                        </a>
+                    </div>
+                    <div class="d-inline-block float-end py-1 me-3">
+                        <a asp-controller="UploadFile" asp-action="Dashboard" style="text-decoration:none">
+                            <i class="bi bi-arrow-bar-left h5" style="color:white"> Dashboard</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="d-inline block float-end py-1">
+                    <a data-bs-toggle="modal" data-bs-target="#uploadModal"
+                       style="text-decoration:none; cursor:pointer">
+                        <i class="bi bi-paperclip h5" style="color:white"> Attach</i>
+                    </a>
+                </div>
+            </div>
+            @if (Model != null && Model.Documents.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th title="Document Status">Status</th>
+                            <th title="Document File Name">Filename</th>
+                            <th title="File Extension">Extension</th>
+                            <th title="Document Type">Document Type</th>
+                            <th title="Added Date Time">Added Date Time</th>
+                            <th title="Download Document">Download</th>
+                            <th title="Delete Document">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var document in Model.Documents)
+                        {
+                            <tr>
+                                <td>@document.FileDocuments.FirstOrDefault().DocumentStatusCode</td>
+                                <td>@document.OutputFileName</td>
+                                <td>@document.FileExtension</td>
+                                <td>@document.DocumentTypeDescription</td>
+                                <td>@document.CreatedDateTime</td>
+                                <td class="text-center" style="width:5%">
+                                    <a asp-controller="Document" asp-action="Download"
+                                       asp-route-documentID="@document.DocumentID"
+                                       asp-route-fileID="@Model.FileID"
+                                       asp-route-invoiceNumber="@Model.InvoiceNumber"
+                                       asp-route-invoiceDate="@Model.InvoiceDate"
+                                       asp-route-numberOfDocs="@Model.NumberOfDocs">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                </td>
+                                <td class="text-center" style="width:5%">
+                                    <a asp-controller="Document" asp-action="Delete"
+                                       asp-route-documentID="@document.DocumentID"
+                                       asp-route-fileID="@Model.FileID"
+                                       asp-route-documentName="@document.OutputFileName">
+                                        <i class="bi bi-trash3-fill" style="color:red"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-white">No Documents attached.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Attach Document</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Attach" asp-controller="Document" method="post" enctype="multipart/form-data">
+                    <input asp-for="InvoiceNumber" hidden />
+                    <input asp-for="InvoiceDate" hidden />
+                    <input asp-for="NumberOfDocs" hidden />
+                    <div class="mb-3">
+                        <label for="DocumentTypeCode" class="form-label">Document Type Code</label>
+                        <select asp-for="DocumentTypeCode" asp-items="Model.DocumentTypes" class="form-control">
+                            <option value="">-- Select Type --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="file" class="form-label">File</label>
+                        <input type="file" class="form-control" id="file" name="File" required>
+                    </div>
+                    <input type="hidden" name="FileId" value="@Model.FileID" />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for status messages -->
+<div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusModalLabel">Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-@TempData["MessageType"]">
+                    @TempData["Message"]
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="closebtn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var message = '@TempData["Message"]';
+            if (message) {
+                var statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
+                statusModal.show();
+            }
+        });
+    </script>
+}

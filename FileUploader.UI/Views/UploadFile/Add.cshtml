@@ -1,0 +1,61 @@
+﻿@model UploadFileAddResponse
+@{
+    ViewBag.Title = "Add File";
+}
+
+<div class="bg-info py-2">
+    <div class="container-fluid">
+        <h2 class="d-inline-block text-white">Add File</h2>
+        <div class="d-inline-block float-end py-1">
+            <a asp-controller="UploadFile" asp-action="Dashboard" style="text-decoration:none">
+                <i class="bi bi-arrow-bar-left h3" style="color:white"> Back To Dashboard</i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-3">
+    <form method="post">
+        <div class="mb-3 row">
+            <label for="FileNumber" class="col-sm-2 col-form-label text-white">File Number:</label>
+            <div class="col-sm-10">
+                <input asp-for="FileNumber" class="form-control" id="FileNumber">
+                <span asp-validation-for="FileNumber" class="text-danger"></span>
+            </div>
+            
+        </div>
+        <div class="mb-3 row">
+            <label for="InvoiceNumber" class="col-sm-2 col-form-label text-white">Invoice Number:</label>
+            <div class="col-sm-10">
+                <input asp-for="InvoiceNumber" class="form-control" id="InvoiceNumber">
+                <span asp-validation-for="InvoiceNumber" class="text-danger"></span>
+            </div>            
+        </div>
+        <div class="mb-3 row">
+            <label for="InvoiceDate" class="col-sm-2 col-form-label text-white">Invoice Date:</label>
+            <div class="col-sm-10">
+                <input asp-for="InvoiceDate" class="form-control" id="InvoiceDate">
+                <span asp-validation-for="InvoiceDate" class="text-danger"></span>
+            </div>
+            
+        </div>
+        <div class="mb-3 row">
+            <label for="ClientID" class="col-sm-2 col-form-label text-white">Client</label>
+            <div class="col-sm-10">
+                <select asp-for="ClientID" asp-items="Model.Clients" class="form-control">
+                    <option value="">-- Select Client --</option>
+                </select>
+                <span asp-validation-for="ClientID" class="text-danger"></span>
+            </div>
+            <div class="text-danger">
+                @ViewBag.Error
+            </div>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary float-end col-sm-1" asp-controller="UploadFile"
+                    asp-action="Add">
+                Save
+            </button>
+        </div>
+    </form>
+</div>
